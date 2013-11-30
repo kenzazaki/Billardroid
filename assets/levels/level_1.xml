@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level width="800" height="480">    
+    <entity x="100" y="100" type="whiteball"/>
+    <entity x="400" y="120" type="redball"/>
+</level>

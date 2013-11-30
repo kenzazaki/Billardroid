@@ -2,6 +2,9 @@ package com.project.billardroid;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -10,8 +13,11 @@ import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSourc
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
+
+import android.graphics.Color;
 
 import com.project.billardroid.GameActivity;
 
@@ -36,9 +42,13 @@ public class ResourcesManager
     private BitmapTextureAtlas splashTextureAtlas;
     public ITextureRegion menu_background_region;
     public ITextureRegion play_region;
-    public ITextureRegion options_region;
-        
+    public ITextureRegion options_region;   
     private BuildableBitmapTextureAtlas menuTextureAtlas;
+    public Font font;
+    
+    public BuildableBitmapTextureAtlas gameTextureAtlas;
+    public ITiledTextureRegion whiteball_region;
+    public ITiledTextureRegion redball_region;
     
     //---------------------------------------------
     // TEXTURES & TEXTURE REGIONS
@@ -52,6 +62,7 @@ public class ResourcesManager
     {
         loadMenuGraphics();
         loadMenuAudio();
+        loadMenuFonts();
     }
     
     public void loadGameResources()
@@ -68,7 +79,7 @@ public class ResourcesManager
     	menu_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "splash.jpg");
     	play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play_button.png");
     	options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "options_button.png");
-    	       
+    	
     	try 
     	{
     	    this.menuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
@@ -85,9 +96,33 @@ public class ResourcesManager
         
     }
 
+    private void loadMenuFonts()
+    {
+        FontFactory.setAssetBasePath("fonts/");
+        final ITexture mainFontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+        font = FontFactory.createStrokeFromAsset(activity.getFontManager(), mainFontTexture, activity.getAssets(), "arial.ttf", 50, true, Color.WHITE, 2, Color.BLACK);
+        font.load();
+    }
+    
     private void loadGameGraphics()
     {
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+        gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+    	whiteball_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "whiteball.png", 1, 1);
+    	redball_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "redball.png", 1, 1);
+        /*whiteball_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "whiteball.png");
+        redball_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "redball.png"); */
         
+        try 
+        {
+            this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+            this.gameTextureAtlas.load();
+        } 
+        catch (final TextureAtlasBuilderException e)
+        {
+            Debug.e(e);
+        }
     }
     
     private void loadGameFonts()
@@ -112,6 +147,21 @@ public class ResourcesManager
     {
     	splashTextureAtlas.unload();
     	splash_region = null;
+    }
+    
+    public void unloadMenuTextures()
+    {
+        menuTextureAtlas.unload();
+    }
+        
+    public void loadMenuTextures()
+    {
+        menuTextureAtlas.load();
+    }
+    
+    public void unloadGameTextures()
+    {
+        // TODO (Since we did not create any textures for game scene yet)
     }
     
     /**

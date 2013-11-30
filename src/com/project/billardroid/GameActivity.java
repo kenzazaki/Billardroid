@@ -14,6 +14,8 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
+import android.view.KeyEvent;
+
 public class GameActivity extends BaseGameActivity {
 	
 	private Camera camera;
@@ -60,9 +62,19 @@ public class GameActivity extends BaseGameActivity {
 	}
 	
 	@Override
-	public Engine onCreateEngine(EngineOptions pEngineOptions) 
-	{
+	public Engine onCreateEngine(EngineOptions pEngineOptions) {
 	    return new LimitedFPSEngine(pEngineOptions, 60);
+	}
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {  
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	        SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
+	    }
+	    return false; 
+	}
+	
+	protected void onDestroy() {
+		super.onDestroy();
 	}
 
 }
