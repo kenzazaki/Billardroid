@@ -48,6 +48,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private Ball blackball;
 	private ArrayList<Ball> redballs; 
 	private ArrayList<Ball> yellowballs;
+	private ArrayList<Border> horizonborders;
+	private ArrayList<Border> verticalborders;
 	
 	private static final String TAG_ENTITY = "entity";
 	private static final String TAG_ENTITY_ATTRIBUTE_X = "x";
@@ -58,12 +60,16 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_REDBALL = "redball";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_YELLOWBALL = "yellowball";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_BLACKBALL = "blackball";
+	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_HORIZONBORDER = "horizonborder";
+	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_VERTICALBORDER = "verticalborder";
 	
     @Override
     public void createScene()
     {
     	redballs = new ArrayList<Ball>();
     	yellowballs = new ArrayList<Ball>();
+    	horizonborders = new ArrayList<Border>();
+    	verticalborders = new ArrayList<Border>();
         createBackground();
         createHUD();
         createPhysics();
@@ -175,7 +181,19 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
                 {
                 	blackball = new Ball(x, y, vbom, camera, physicsWorld, resourcesManager.blackball_region);
                     levelObject = blackball;
-                }  
+                } 
+                else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_HORIZONBORDER))
+                {
+                	Border border = new Border(x, y, vbom, camera, physicsWorld, resourcesManager.horizonborder_region);
+                	horizonborders.add(border);
+                    levelObject = border;
+                }
+                else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_VERTICALBORDER))
+                {
+                	Border border = new Border(x, y, vbom, camera, physicsWorld, resourcesManager.verticalborder_region);
+                	horizonborders.add(border);
+                    levelObject = border;
+                } 
                 else
                 {
                     throw new IllegalArgumentException();

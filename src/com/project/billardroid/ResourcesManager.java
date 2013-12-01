@@ -51,6 +51,8 @@ public class ResourcesManager
     public ITiledTextureRegion redball_region;
     public ITiledTextureRegion yellowball_region;
     public ITiledTextureRegion blackball_region;
+    public ITextureRegion horizonborder_region;
+    public ITextureRegion verticalborder_region;
     
     //---------------------------------------------
     // TEXTURES & TEXTURE REGIONS
@@ -115,7 +117,9 @@ public class ResourcesManager
     	redball_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "redball.png", 1, 1);
     	yellowball_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "yellowball.png", 1, 1);
     	blackball_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "blackball.png", 1, 1);
-        
+    	horizonborder_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "horizonborder.png");
+    	verticalborder_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "verticalborder.png");
+    	
         try 
         {
             this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
