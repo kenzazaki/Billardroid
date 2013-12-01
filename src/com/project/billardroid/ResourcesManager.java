@@ -49,6 +49,8 @@ public class ResourcesManager
     public BuildableBitmapTextureAtlas gameTextureAtlas;
     public ITiledTextureRegion whiteball_region;
     public ITiledTextureRegion redball_region;
+    public ITiledTextureRegion yellowball_region;
+    public ITiledTextureRegion blackball_region;
     
     //---------------------------------------------
     // TEXTURES & TEXTURE REGIONS
@@ -111,8 +113,8 @@ public class ResourcesManager
         gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
     	whiteball_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "whiteball.png", 1, 1);
     	redball_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "redball.png", 1, 1);
-        /*whiteball_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "whiteball.png");
-        redball_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "redball.png"); */
+    	yellowball_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "yellowball.png", 1, 1);
+    	blackball_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "blackball.png", 1, 1);
         
         try 
         {

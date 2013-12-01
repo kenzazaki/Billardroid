@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <level width="800" height="480">    
-    <entity x="100" y="100" type="whiteball"/>
-    <entity x="400" y="120" type="redball"/>
+    <entity x="150" y="200" type="whiteball"/>
+    
+    <entity x="540" y="200" type="redball"/>
+    <entity x="560" y="190" type="yellowball"/>
+    <entity x="560" y="210" type="redball"/>
+    
+    <entity x="580" y="180" type="redball"/>
+	<entity x="580" y="200" type="blackball"/>
+    <entity x="580" y="220" type="yellowball"/>
+    
+    <entity x="600" y="170" type="yellowball"/>
+    <entity x="600" y="190" type="redball"/>
+    <entity x="600" y="210" type="yellowball"/>
+    <entity x="600" y="230" type="redball"/>
+    
+    <entity x="620" y="160" type="redball"/>
+    <entity x="620" y="180" type="yellowball"/> 
+    <entity x="620" y="200" type="yellowball"/>
+    <entity x="620" y="220" type="redball"/>
+    <entity x="620" y="240" type="yellowball"/>
+    
 </level>

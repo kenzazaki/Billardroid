@@ -1,6 +1,7 @@
 package com.project.billardroid;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.IEntity;
@@ -44,7 +45,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private PhysicsWorld physicsWorld;
 	
 	private Ball whiteball;
-	private Ball redball;
+	private Ball blackball;
+	private ArrayList<Ball> redballs; 
+	private ArrayList<Ball> yellowballs;
 	
 	private static final String TAG_ENTITY = "entity";
 	private static final String TAG_ENTITY_ATTRIBUTE_X = "x";
@@ -53,10 +56,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	    
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_WHITEBALL = "whiteball";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_REDBALL = "redball";
+	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_YELLOWBALL = "yellowball";
+	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_BLACKBALL = "blackball";
 	
     @Override
     public void createScene()
     {
+    	redballs = new ArrayList<Ball>();
+    	yellowballs = new ArrayList<Ball>();
         createBackground();
         createHUD();
         createPhysics();
@@ -154,9 +161,21 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
                 }
                 else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_REDBALL))
                 {
-                    redball = new Ball(x, y, vbom, camera, physicsWorld, resourcesManager.redball_region);
-                    levelObject = redball;
-                }          
+                	Ball ball = new Ball(x, y, vbom, camera, physicsWorld, resourcesManager.redball_region);
+                    redballs.add(ball);
+                    levelObject = ball;
+                } 
+                else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_YELLOWBALL))
+                {
+                	Ball ball = new Ball(x, y, vbom, camera, physicsWorld, resourcesManager.yellowball_region);
+                	yellowballs.add(ball);
+                    levelObject = ball;
+                }
+                else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_BLACKBALL))
+                {
+                	blackball = new Ball(x, y, vbom, camera, physicsWorld, resourcesManager.blackball_region);
+                    levelObject = blackball;
+                }  
                 else
                 {
                     throw new IllegalArgumentException();
