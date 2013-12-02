@@ -15,6 +15,8 @@ import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.extension.physics.box2d.util.Vector2Pool;
+import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.SAXUtils;
 import org.andengine.util.adt.align.HorizontalAlign;
@@ -41,7 +43,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	
 	private HUD gameHUD;
 	private Text scoreText;
-	private int score = 0;
+	private float score = 0;
 	private PhysicsWorld physicsWorld;
 	
 	private Ball whiteball;
@@ -64,6 +66,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_HORIZONBORDER = "horizonborder";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_VERTICALBORDER = "verticalborder";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_QUEUE = "queue";
+	
+	private float touchDownX;
+	private float touchDownY;
 	
     @Override
     public void createScene()
@@ -119,10 +124,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
         camera.setHUD(gameHUD);
     }
 
-    private void addToScore(int i)
+    private void setScore(String s)
     {
-        score += i;
-        scoreText.setText("Score: " + score);
+        scoreText.setText("Text : " + s);
     }
 
     private void createPhysics()
@@ -218,13 +222,26 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
     {
-        if (pSceneTouchEvent.isActionDown())
+        if (pSceneTouchEvent.isActionDown()){ }
+        
+        if (pSceneTouchEvent.isActionMove())
+        {
+        	/* On drag la canne qui tourne autour de la boule blanche sur un cercle de rayon défini (5) */
+        	if(queue.getParent() == this) {
+            	Vector2 touchToWhiteball = new Vector2(pSceneTouchEvent.getX()/PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT-whiteball.body.getPosition().x, pSceneTouchEvent.getY()/PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT-whiteball.body.getPosition().y);
+            	double angle = Math.atan2(touchToWhiteball.y, touchToWhiteball.x);
+            	Vector2 newPosition = new Vector2((whiteball.body.getPosition().x + 5*(float)Math.cos(angle)), (whiteball.body.getPosition().y + 5*(float)Math.sin(angle)));
+            	queue.body.setTransform(newPosition, (float)angle);
+        	}
+        }
+        
+        if (pSceneTouchEvent.isActionUp())
         {
         	/* Si la canne est présente, on tire la boule blanche */
         	if(queue.getParent() == this)
-        		queue.applyImpulse();
+        		queue.applyImpulse(whiteball.body.getPosition());
         }
-        return false;
+        return true;
     }
     
     private ContactListener contactListener()
@@ -251,9 +268,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
                 
                 /* Quand la canne est entrée en contact avec la boule blanche, le coup est joué et la canne disparaît */
                 if((x1.getBody().getUserData() == "queue" && x2.getBody().getUserData() == "ball") || (x1.getBody().getUserData() == "ball" && x2.getBody().getUserData() == "queue")) {
-                	/* Arrêt de la canne */
+                	/* Arrêt de la canne et décélération de la boule blanche*/
                 	queue.body.setLinearVelocity(0,0);
                 	queue.body.setAngularVelocity(0);
+                	whiteball.body.setLinearDamping(0.5f);
                 	/* Suppression de la canne */
                 	PhysicsConnector physicsConnector = physicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(queue);
                     physicsWorld.unregisterPhysicsConnector(physicsConnector);

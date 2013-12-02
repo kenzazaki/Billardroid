@@ -4,6 +4,8 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.extension.physics.box2d.util.Vector2Pool;
+import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -41,11 +43,12 @@ public class Queue extends Sprite{
     	
         body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, fixtureDef);
         body.setUserData("queue");
-        physicsWorld.registerPhysicsConnector(new PhysicsConnector(this, body, true, false));
+        physicsWorld.registerPhysicsConnector(new PhysicsConnector(this, body, true, true));
     }
     
-    public void applyImpulse() {
-    	body.applyLinearImpulse(new Vector2(45.0f, body.getLinearVelocity().y), body.getWorldCenter());
+    public void applyImpulse(Vector2 target) {
+    	Vector2 direction = Vector2Pool.obtain((target.x - body.getPosition().x)*15.0f, (target.y - body.getPosition().y)*15.0f);
+    	body.applyLinearImpulse(direction, body.getWorldCenter());
     }
 
 }
