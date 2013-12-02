@@ -1,5 +1,4 @@
 package com.project.billardroid;
-
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -8,11 +7,13 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-public class Border extends Sprite {
+
+public class Queue extends Sprite{
 
 	public Body body;
 	
@@ -20,9 +21,9 @@ public class Border extends Sprite {
     // CONSTRUCTOR
     // ---------------------------------------------
     
-    public Border(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld, ITextureRegion border_region)
+    public Queue(float pX, float pY, VertexBufferObjectManager vbo, Camera camera, PhysicsWorld physicsWorld, ITextureRegion queue_region)
     {
-    	super(pX, pY, border_region, vbo);
+    	super(pX, pY, queue_region, vbo);
         createPhysics(camera, physicsWorld);
     }
     
@@ -32,13 +33,19 @@ public class Border extends Sprite {
     
     private void createPhysics(final Camera camera, PhysicsWorld physicsWorld)
     {        
-    	FixtureDef fixtureDef = PhysicsFactory.createFixtureDef(0.0f, 0.0f, 0.0f);
-    	/* Les bordures collisionnent avec toutes les boules (1 et 8), mais pas la queue (4)*/
-    	fixtureDef.filter.categoryBits = ResourcesManager.getInstance().CATEGORY_BORDER;
-    	fixtureDef.filter.maskBits = ResourcesManager.getInstance().MASK_BORDER;
+    	FixtureDef fixtureDef = PhysicsFactory.createFixtureDef(10.0f, 0.0f, 0.0f);
     	
-        body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.StaticBody, fixtureDef);
-        body.setUserData("border");
+    	/* La canne collisionne seulement avec la boule blanche */
+    	fixtureDef.filter.categoryBits = ResourcesManager.getInstance().CATEGORY_QUEUE;
+    	fixtureDef.filter.maskBits = ResourcesManager.getInstance().MASK_QUEUE;
+    	
+        body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, fixtureDef);
+        body.setUserData("queue");
         physicsWorld.registerPhysicsConnector(new PhysicsConnector(this, body, true, false));
     }
+    
+    public void applyImpulse() {
+    	body.applyLinearImpulse(new Vector2(45.0f, body.getLinearVelocity().y), body.getWorldCenter());
+    }
+
 }

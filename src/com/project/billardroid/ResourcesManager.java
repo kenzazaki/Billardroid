@@ -38,14 +38,31 @@ public class ResourcesManager
     public GameActivity activity;
     public Camera camera;
     public VertexBufferObjectManager vbom;
+    public Font font;
+    
+    //---------------------------------------------
+    // CATEGORY & COLLISION MASKS
+    //---------------------------------------------
+    
+    public final short CATEGORY_BALL = 0x0001;
+    public final short CATEGORY_QUEUE = 0x0010;
+    public final short CATEGORY_BORDER = 0x0100;
+    public final short CATEGORY_WHITEBALL = 0x1000;
+    public final short MASK_BALL = CATEGORY_BALL | CATEGORY_BORDER  | CATEGORY_WHITEBALL;
+    public final short MASK_QUEUE = CATEGORY_WHITEBALL;
+    public final short MASK_BORDER = CATEGORY_BALL | CATEGORY_WHITEBALL;
+    public final short MASK_WHITEBALL = CATEGORY_BALL | CATEGORY_BORDER | CATEGORY_QUEUE;
+    
+    //---------------------------------------------
+    // TEXTURES & TEXTURE REGIONS
+    //---------------------------------------------
+    
     public ITextureRegion splash_region;
     private BitmapTextureAtlas splashTextureAtlas;
     public ITextureRegion menu_background_region;
     public ITextureRegion play_region;
     public ITextureRegion options_region;   
     private BuildableBitmapTextureAtlas menuTextureAtlas;
-    public Font font;
-    
     public BuildableBitmapTextureAtlas gameTextureAtlas;
     public ITiledTextureRegion whiteball_region;
     public ITiledTextureRegion redball_region;
@@ -53,10 +70,7 @@ public class ResourcesManager
     public ITiledTextureRegion blackball_region;
     public ITextureRegion horizonborder_region;
     public ITextureRegion verticalborder_region;
-    
-    //---------------------------------------------
-    // TEXTURES & TEXTURE REGIONS
-    //---------------------------------------------
+    public ITextureRegion queue_region;
     
     //---------------------------------------------
     // CLASS LOGIC
@@ -119,6 +133,7 @@ public class ResourcesManager
     	blackball_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "blackball.png", 1, 1);
     	horizonborder_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "horizonborder.png");
     	verticalborder_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "verticalborder.png");
+    	queue_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "queue.png");
     	
         try 
         {

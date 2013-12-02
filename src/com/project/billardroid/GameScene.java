@@ -46,6 +46,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	
 	private Ball whiteball;
 	private Ball blackball;
+	private Queue queue;
 	private ArrayList<Ball> redballs; 
 	private ArrayList<Ball> yellowballs;
 	private ArrayList<Border> horizonborders;
@@ -62,6 +63,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_BLACKBALL = "blackball";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_HORIZONBORDER = "horizonborder";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_VERTICALBORDER = "verticalborder";
+	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_QUEUE = "queue";
 	
     @Override
     public void createScene()
@@ -101,7 +103,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     
     private void createBackground()
     {
-        setBackground(new Background(Color.BLUE));
+        setBackground(new Background(Color.GREEN));
     }
     
     private void createHUD()
@@ -109,7 +111,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
         gameHUD = new HUD();
         
         // CREATE SCORE TEXT
-        scoreText = new Text(20, 420, resourcesManager.font, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
+        scoreText = new Text(15, 420, resourcesManager.font, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
         scoreText.setAnchorCenter(0, 0);    
         scoreText.setText("Score: 0");
         gameHUD.attachChild(scoreText);
@@ -160,6 +162,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
                 
                 final Sprite levelObject;
                 
+                /* Parcours du fichier XML de level pour faire apparaître les éléments */
                 if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_WHITEBALL))
                 {
                     whiteball = new Ball(x, y, vbom, camera, physicsWorld, resourcesManager.whiteball_region);
@@ -193,6 +196,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
                 	Border border = new Border(x, y, vbom, camera, physicsWorld, resourcesManager.verticalborder_region);
                 	horizonborders.add(border);
                     levelObject = border;
+                }
+                else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_QUEUE))
+                {
+                	queue = new Queue(x, y, vbom, camera, physicsWorld, resourcesManager.queue_region);
+                    levelObject = queue;
                 } 
                 else
                 {
@@ -212,7 +220,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     {
         if (pSceneTouchEvent.isActionDown())
         {
-        	whiteball.applyImpulse();
+        	/* Si la canne est présente, on tire la boule blanche */
+        	if(queue.getParent() == this)
+        		queue.applyImpulse();
         }
         return false;
     }
@@ -225,18 +235,32 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
             {
                 final Fixture x1 = contact.getFixtureA();
                 final Fixture x2 = contact.getFixtureB();
-
-                if (x1.getBody().getUserData() != null && x2.getBody().getUserData() != null)
+                
+                /* Quand deux boules se rencontrent, leur décélération linéaire est précisée */
+                if (x1.getBody().getUserData() == "ball" && x2.getBody().getUserData() == "ball")
                 {
                     x1.getBody().setLinearDamping(0.5f);
                     x2.getBody().setLinearDamping(0.5f);
                 }
-                
-                addToScore(1);
             }
 
             public void endContact(Contact contact)
             {
+                final Fixture x1 = contact.getFixtureA();
+                final Fixture x2 = contact.getFixtureB();
+                
+                /* Quand la canne est entrée en contact avec la boule blanche, le coup est joué et la canne disparaît */
+                if((x1.getBody().getUserData() == "queue" && x2.getBody().getUserData() == "ball") || (x1.getBody().getUserData() == "ball" && x2.getBody().getUserData() == "queue")) {
+                	/* Arrêt de la canne */
+                	queue.body.setLinearVelocity(0,0);
+                	queue.body.setAngularVelocity(0);
+                	/* Suppression de la canne */
+                	PhysicsConnector physicsConnector = physicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(queue);
+                    physicsWorld.unregisterPhysicsConnector(physicsConnector);
+                    queue.body.setActive(false);
+                    physicsWorld.destroyBody(queue.body);
+                    detachChild(queue);
+                }
             }
 
 			@Override

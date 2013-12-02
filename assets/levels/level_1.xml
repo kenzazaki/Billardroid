@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <level width="800" height="480">  
+    
     <entity x="400" y="0" type="horizonborder"/>
     <entity x="400" y="480" type="horizonborder"/>
     <entity x="0" y="240" type="verticalborder"/>
     <entity x="800" y="240" type="verticalborder"/>
     
-    <entity x="150" y="200" type="whiteball"/>
+    <entity x="0" y="240" type="queue"/>
     
-    <entity x="540" y="200" type="redball"/>
-    <entity x="560" y="190" type="yellowball"/>
-    <entity x="560" y="210" type="redball"/>
+    <entity x="200" y="240" type="whiteball"/>
     
-    <entity x="580" y="180" type="redball"/>
-	<entity x="580" y="200" type="blackball"/>
-    <entity x="580" y="220" type="yellowball"/>
+    <entity x="540" y="240" type="redball"/>
+    <entity x="560" y="230" type="yellowball"/>
+    <entity x="560" y="250" type="redball"/>
     
-    <entity x="600" y="170" type="yellowball"/>
-    <entity x="600" y="190" type="redball"/>
+    <entity x="580" y="220" type="redball"/>
+	<entity x="580" y="240" type="blackball"/>
+    <entity x="580" y="260" type="yellowball"/>
+    
     <entity x="600" y="210" type="yellowball"/>
     <entity x="600" y="230" type="redball"/>
+    <entity x="600" y="250" type="yellowball"/>
+    <entity x="600" y="270" type="redball"/>
     
-    <entity x="620" y="160" type="redball"/>
-    <entity x="620" y="180" type="yellowball"/> 
-    <entity x="620" y="200" type="yellowball"/>
-    <entity x="620" y="220" type="redball"/>
+    <entity x="620" y="200" type="redball"/>
+    <entity x="620" y="220" type="yellowball"/> 
     <entity x="620" y="240" type="yellowball"/>
+    <entity x="620" y="260" type="redball"/>
+    <entity x="620" y="280" type="yellowball"/>
     
 </level>
