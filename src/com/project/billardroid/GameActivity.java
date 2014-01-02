@@ -14,7 +14,9 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
+import android.app.AlertDialog;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 
 public class GameActivity extends BaseGameActivity {
 	
@@ -59,7 +61,7 @@ public class GameActivity extends BaseGameActivity {
 		        }
 		    }));
 		    pOnPopulateSceneCallback.onPopulateSceneFinished();
-	}
+	}	
 	
 	@Override
 	public Engine onCreateEngine(EngineOptions pEngineOptions) {
